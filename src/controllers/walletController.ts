@@ -65,5 +65,5 @@ export const deleteWallet: RequestHandler = async (req, res) => {
   }
 
   await wallet.destroy();
-  res.json({ message: "Wallet deleted" });
+  res.status(204).end();
 };
