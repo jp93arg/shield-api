@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { signin, signout, signup } from "../controllers/authController";
+import { validateRequest } from "../middlewares/validateRequest";
+import { signupSchema, signinSchema } from "../schemas/authSchemas";
 
 const router = Router();
 
@@ -40,7 +42,7 @@ const router = Router();
  *       401:
  *         description: Invalid credentials
  */
-router.post("/signin", signin);
+router.post("/signin", validateRequest({body: signinSchema}), signin);
 
 /**
  * @swagger
@@ -94,6 +96,6 @@ router.post("/signout", signout);
  *       400:
  *         description: Invalid input or email already in use
  */
-router.post("/signup", signup);
+router.post("/signup", validateRequest({body: signupSchema}), signup);
 
 export default router;

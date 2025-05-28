@@ -7,6 +7,9 @@ import {
   deleteWallet
 } from "../controllers/walletController";
 import { authenticateToken } from "../middlewares/auth";
+import { createWalletSchema, updateWalletSchema } from "../schemas/walletSchemas";
+import { validateRequest } from "../middlewares/validateRequest";
+import { idParamSchema } from "../schemas/commonSchemas";
 
 const router = Router();
 
@@ -42,7 +45,7 @@ router.get("/wallets", getAllWallets);
  *       201:
  *         description: Wallet created successfully
  */
-router.post("/wallets", createWallet);
+router.post("/wallets", validateRequest({body: createWalletSchema}), createWallet);
 
 /**
  * @swagger
@@ -63,7 +66,7 @@ router.post("/wallets", createWallet);
  *       200:
  *         description: Wallet retrieved successfully
  */
-router.get("/wallets/:id", getWalletById);
+router.get("/wallets/:id", validateRequest({params: idParamSchema}), getWalletById);
 
 /**
  * @swagger
@@ -97,7 +100,7 @@ router.get("/wallets/:id", getWalletById);
  *       200:
  *         description: Wallet updated successfully
  */
-router.put("/wallets/:id", updateWallet);
+router.put("/wallets/:id", validateRequest({params: idParamSchema, body: updateWalletSchema}), updateWallet);
 
 /**
  * @swagger
@@ -118,6 +121,6 @@ router.put("/wallets/:id", updateWallet);
  *       204:
  *         description: Wallet deleted successfully
  */
-router.delete("/wallets/:id", deleteWallet);
+router.delete("/wallets/:id", validateRequest({params: idParamSchema}), deleteWallet);
 
 export default router;
