@@ -26,20 +26,12 @@ services:
     tmpfs:
       - /var/lib/postgresql/data # ephemeral
 
-  redis:
-    image: redis:8.0.1
-    restart: always
-    container_name: shield_redis
-    ports:
-      - "6379:6379"
-
   app:
     build: .
     ports:
       - "3000:3000"
     depends_on:
       - db
-      - redis
     environment:
       - NODE_ENV=development
       - DB_HOST=postgres
@@ -47,8 +39,6 @@ services:
       - DB_USER=youruser
       - DB_PASS=yourpass
       - DB_NAME=yourdb
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - JWT_SECRET=your_secret_key
 
 volumes:
