@@ -50,7 +50,11 @@ docker-compose up --build
 
 2. App will be available at:
 http://localhost:3000
+
+
 Swagger docs: http://localhost:3000/api-docs
+<img width="1162" alt="image" src="https://github.com/user-attachments/assets/18d6876d-ac6f-45b7-8cd1-b7ccd876df96" />
+
 
 ## Postman Collection
 
