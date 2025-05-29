@@ -29,11 +29,12 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
     expiresIn: "1h"
   });
 
-  res.json({ token });
+  res.status(200).json({ token });
   return;
 };
 
 export const signout = async (_req: Request, res: Response): Promise<void> => {
+  // In a stateless JWT authentication system, signout is typically handled on the client side
   res.json({ message: "Signed out" });
   return;
 };
@@ -55,9 +56,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   const hashed = await bcrypt.hash(password, 10);
   const user = await User.create({ email, password: hashed });
 
-  res.status(201).json({
-    message: "User created",
-    user: { id: user.id, email: user.email }
-  });
+  res.status(201).json({ id: user.id, email: user.email });
   return;
 };
