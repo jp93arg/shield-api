@@ -4,6 +4,7 @@ import { validateRequest } from "../middlewares/validateRequest";
 import { signupSchema, signinSchema } from "../schemas/authSchemas";
 
 const router = Router();
+router.use("/auth", router);
 
 /**
  * @swagger

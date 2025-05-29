@@ -12,6 +12,7 @@ import { validateRequest } from "../middlewares/validateRequest";
 import { idParamSchema } from "../schemas/commonSchemas";
 
 const router = Router();
+router.use("/wallets", router);
 
 router.use(authenticateToken); // protects all routes below
 
@@ -86,7 +87,7 @@ router.use(authenticateToken); // protects all routes below
  *                       type: integer
  *                       example: 25
  */
-router.get("/wallets", validateRequest({query: getWalletsQuerySchema}), getAllWallets);
+router.get("/", validateRequest({query: getWalletsQuerySchema}), getAllWallets);
 
 /**
  * @swagger
@@ -116,7 +117,7 @@ router.get("/wallets", validateRequest({query: getWalletsQuerySchema}), getAllWa
  *       201:
  *         description: Wallet created successfully
  */
-router.post("/wallets", validateRequest({body: createWalletSchema}), createWallet);
+router.post("/", validateRequest({body: createWalletSchema}), createWallet);
 
 /**
  * @swagger
@@ -137,7 +138,7 @@ router.post("/wallets", validateRequest({body: createWalletSchema}), createWalle
  *       200:
  *         description: Wallet retrieved successfully
  */
-router.get("/wallets/:id", validateRequest({params: idParamSchema}), getWalletById);
+router.get("/:id", validateRequest({params: idParamSchema}), getWalletById);
 
 /**
  * @swagger
@@ -171,7 +172,7 @@ router.get("/wallets/:id", validateRequest({params: idParamSchema}), getWalletBy
  *       200:
  *         description: Wallet updated successfully
  */
-router.put("/wallets/:id", validateRequest({params: idParamSchema, body: updateWalletSchema}), updateWallet);
+router.put("/:id", validateRequest({params: idParamSchema, body: updateWalletSchema}), updateWallet);
 
 /**
  * @swagger
@@ -192,6 +193,6 @@ router.put("/wallets/:id", validateRequest({params: idParamSchema, body: updateW
  *       204:
  *         description: Wallet deleted successfully
  */
-router.delete("/wallets/:id", validateRequest({params: idParamSchema}), deleteWallet);
+router.delete("/:id", validateRequest({params: idParamSchema}), deleteWallet);
 
 export default router;

@@ -11,8 +11,8 @@ let walletId: string;
 
 beforeAll(async () => {
   // Create and login user
-  await request(app).post("/api/signup").send(user);
-  const res = await request(app).post("/api/signin").send(user);
+  await request(app).post("/api/auth/signup").send(user);
+  const res = await request(app).post("/api/auth/signin").send(user);
   token = res.body.token;
 });
 
