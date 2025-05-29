@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "ts-node src/server.ts",
     "test:setup": "docker-compose up -d test-db",
     "test:run": "wait-on tcp:localhost:5433 && jest --runInBand",
     "test": "npm run test:setup && npm run test:run",
