@@ -5,9 +5,28 @@ import { AuthRequest } from "../middlewares/auth";
 // Get all wallets
 export const getAllWallets: RequestHandler = async (req, res) => {
   const userId = (req as AuthRequest).user.id;
-  const wallets = await Wallet.findAll({ where: { userId } });
-  res.json(wallets);
-};
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+  
+    const offset = (page - 1) * limit;
+  
+    const { count, rows } = await Wallet.findAndCountAll({
+      where: { userId },
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+  
+    res.json({
+      data: rows,
+      meta: {
+        page,
+        limit,
+        totalPages: Math.ceil(count / limit),
+        totalItems: count,
+      },
+    });
+  };
 
 // Get a wallet by ID
 export const getWalletById: RequestHandler = async (req, res) => {

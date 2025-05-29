@@ -7,7 +7,7 @@ import {
   deleteWallet
 } from "../controllers/walletController";
 import { authenticateToken } from "../middlewares/auth";
-import { createWalletSchema, updateWalletSchema } from "../schemas/walletSchemas";
+import { createWalletSchema, updateWalletSchema, getWalletsQuerySchema } from "../schemas/walletSchemas";
 import { validateRequest } from "../middlewares/validateRequest";
 import { idParamSchema } from "../schemas/commonSchemas";
 
@@ -15,7 +15,78 @@ const router = Router();
 
 router.use(authenticateToken); // protects all routes below
 
-router.get("/wallets", getAllWallets);
+/**
+ * @swagger
+ * /wallets:
+ *   get:
+ *     summary: Get paginated list of wallets
+ *     tags: [Wallets]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: Paginated list of wallets
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       tag:
+ *                         type: string
+ *                         example: Main Wallet
+ *                       chain:
+ *                         type: string
+ *                         example: Ethereum
+ *                       address:
+ *                         type: string
+ *                         example: 0xabc123...
+ *                       userId:
+ *                         type: integer
+ *                         example: 1
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                       example: 1
+ *                     limit:
+ *                       type: integer
+ *                       example: 10
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 3
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 25
+ */
+router.get("/wallets", validateRequest({query: getWalletsQuerySchema}), getAllWallets);
 
 /**
  * @swagger

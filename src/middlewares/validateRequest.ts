@@ -34,7 +34,7 @@ export const validateRequest = (schemas: ValidateOptions): RequestHandler => {
       if (!result.success) {
         validationErrors.query = result.error.format();
       } else {
-        req.query = result.data;
+        Object.assign(req.query, result.data)
       }
     }
 

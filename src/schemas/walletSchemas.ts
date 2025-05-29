@@ -12,3 +12,12 @@ export const updateWalletSchema = z.object({
   address: z.string().min(1).optional(),
   tag: z.string().optional(),
 });
+
+export const getWalletsQuerySchema = z.object({
+  page: z.string().optional().transform(Number).refine(n => n > 0, {
+    message: "Page must be a positive number"
+  }),
+  limit: z.string().optional().transform(Number).refine(n => n > 0 && n <= 100, {
+    message: "Limit must be between 1 and 100"
+  }),
+});

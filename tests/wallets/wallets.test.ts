@@ -41,14 +41,12 @@ describe("Wallets", () => {
     walletId = res.body.id;
   });
 
-  it("should return all wallets for authenticated user", async () => {
+  it("should return 400 bad request if trying to list all the wallets without pagination", async () => {
     const res = await request(app)
       .get("/api/wallets")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThanOrEqual(1);
+    expect(res.status).toBe(400);
   });
 
   it("should return wallet by ID", async () => {
@@ -92,5 +90,36 @@ describe("Wallets", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(404);
+  });
+
+  it("GET /wallets with pagination - returns first 5 wallets with correct metadata", async () => {
+    // Create 10 wallets
+    for (let i = 0; i < 10; i++) {
+      await request(app)
+        .post("/api/wallets")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          tag: `Wallet ${i + 1}`,
+          chain: "Ethereum",
+          address: `0x${i}abc123`,
+        });
+    }
+
+    const res = await request(app)
+      .get("/api/wallets?page=1&limit=5")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.length).toBe(5);
+
+    expect(res.body.meta).toMatchObject({
+      page: 1,
+      limit: 5,
+      totalPages: 2,
+      totalItems: 10,
+    });
+
+    expect(res.body.data[0]).toHaveProperty("tag");
+    expect(res.body.data[0]).toHaveProperty("address");
   });
 });
