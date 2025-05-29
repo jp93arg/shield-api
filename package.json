@@ -10,6 +10,7 @@
     "migrate": "sequelize db:migrate",
     "test:setup": "docker-compose up -d test-db",
     "test:run": "wait-on tcp:localhost:5433 && jest --runInBand",
+    "test:ci": "jest --runInBand",
     "test": "npm run test:setup && npm run test:run",
     "test:clean": "docker-compose down test-db"
   },
@@ -29,6 +30,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.0",
     "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",

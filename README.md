@@ -51,3 +51,7 @@ docker-compose up --build
 2. App will be available at:
 http://localhost:3000
 Swagger docs: http://localhost:3000/api-docs
+
+## CI
+
+![Tests](https://github.com/jp93arg/shield-backend-challenge/actions/workflows/test.yml/badge.svg)
