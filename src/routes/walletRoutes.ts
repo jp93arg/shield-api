@@ -105,7 +105,8 @@ router.get("/", validateRequest({query: getWalletsQuerySchema}), getAllWallets);
  *             type: object
  *             properties:
  *               chain:
- *                 type: string
+ *                type: string
+ *                enum: [bitcoin, ethereum, tron]
  *               address:
  *                 type: string
  *               tag:
@@ -163,7 +164,8 @@ router.get("/:id", validateRequest({params: idParamSchema}), getWalletById);
  *             type: object
  *             properties:
  *               chain:
- *                 type: string
+ *                type: string
+ *                enum: [bitcoin, ethereum, tron]
  *               address:
  *                 type: string
  *               tag:

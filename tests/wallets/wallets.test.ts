@@ -19,7 +19,7 @@ beforeAll(async () => {
 describe("Wallets", () => {
   it("should reject unauthenticated wallet creation", async () => {
     const res = await request(app).post("/api/wallets").send({
-      chain: "Ethereum",
+      chain: "ethereum",
       address: "0xabc"
     });
 
@@ -31,7 +31,7 @@ describe("Wallets", () => {
       .post("/api/wallets")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        chain: "Ethereum",
+        chain: "ethereum",
         address: "0xabc123",
         tag: "My ETH Wallet"
       });
@@ -70,7 +70,7 @@ describe("Wallets", () => {
     const res = await request(app)
       .put(`/api/wallets/${walletId}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ tag: "Updated Tag", chain: "Ethereum", address: "0xabc123" });
+      .send({ tag: "Updated Tag", chain: "ethereum", address: "0xabc123" });
 
     expect(res.status).toBe(200);
     expect(res.body.tag).toBe("Updated Tag");
@@ -100,7 +100,7 @@ describe("Wallets", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({
           tag: `Wallet ${i + 1}`,
-          chain: "Ethereum",
+          chain: "ethereum",
           address: `0x${i}abc123`,
         });
     }
@@ -121,5 +121,18 @@ describe("Wallets", () => {
 
     expect(res.body.data[0]).toHaveProperty("tag");
     expect(res.body.data[0]).toHaveProperty("address");
+  });
+
+  it("should reject an unsupported chain", async () => {
+    const res = await request(app)
+      .post("/api/wallets")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        chain: "solana",
+        address: "some-address"
+      });
+  
+    expect(res.status).toBe(400);
+    expect(res.body.errors?.body?.chain?._errors[0]).toMatch(/Chain must be one of/);
   });
 });
