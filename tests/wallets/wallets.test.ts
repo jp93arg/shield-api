@@ -20,7 +20,7 @@ describe("Wallets", () => {
   it("should reject unauthenticated wallet creation", async () => {
     const res = await request(app).post("/api/wallets").send({
       chain: "ethereum",
-      address: "0xabc"
+      address: "0x0000000000000000000000000000000000000000",
     });
 
     expect(res.status).toBe(401);
@@ -32,7 +32,7 @@ describe("Wallets", () => {
       .set("Authorization", `Bearer ${token}`)
       .send({
         chain: "ethereum",
-        address: "0xabc123",
+        address: "0x0000000000000000000000000000000000000000",
         tag: "My ETH Wallet"
       });
 
@@ -70,7 +70,7 @@ describe("Wallets", () => {
     const res = await request(app)
       .put(`/api/wallets/${walletId}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ tag: "Updated Tag", chain: "ethereum", address: "0xabc123" });
+      .send({ tag: "Updated Tag", chain: "ethereum", address: "0x0000000000000000000000000000000000000000" });
 
     expect(res.status).toBe(200);
     expect(res.body.tag).toBe("Updated Tag");
@@ -101,7 +101,7 @@ describe("Wallets", () => {
         .send({
           tag: `Wallet ${i + 1}`,
           chain: "ethereum",
-          address: `0x${i}abc123`,
+          address: `0x000000000000000000000000000000000000000${i}`,
         });
     }
 
@@ -135,4 +135,42 @@ describe("Wallets", () => {
     expect(res.status).toBe(400);
     expect(res.body.errors?.body?.chain?._errors[0]).toMatch(/Chain must be one of/);
   });
+
+  it("should reject wallet creation with invalid Ethereum address", async () => {
+    const res = await request(app)
+      .post("/api/wallets")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        chain: "ethereum",
+        address: "not_a_valid_eth_address"
+      });
+  
+    expect(res.status).toBe(400);
+    expect(res.body.errors?.body?.address?._errors[0]).toMatch(/invalid/i);
+  });
+
+  it("should reject address update if it does not match wallet's existing chain", async () => {
+    // Create a valid wallet first
+    const createRes = await request(app)
+      .post("/api/wallets")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        chain: "ethereum",
+        address: "0x0000000000000000000000000000000000000000"
+      });
+  
+    const walletId = createRes.body.id;
+  
+    // Try to update address with an invalid Ethereum format
+    const updateRes = await request(app)
+      .put(`/api/wallets/${walletId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        address: "bad-format-address"
+      });
+  
+    expect(updateRes.status).toBe(400);
+    expect(updateRes.body.message).toMatch(/invalid/i);
+  });
+  
 });

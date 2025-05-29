@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Wallet from "../models/wallet";
 import { AuthRequest } from "../middlewares/auth";
+import { addressValidatorMap } from "../utils/addressValidator";
 
 // Get all wallets
 export const getAllWallets: RequestHandler = async (req, res) => {
@@ -65,6 +66,13 @@ export const updateWallet: RequestHandler = async (req, res) => {
   const wallet = await Wallet.findOne({ where: { id, userId } });
   if (!wallet) {
     res.status(404).json({ message: "Wallet not found" });
+    return;
+  }
+
+  const finalChain = req.body.chain || wallet.chain;
+  const addressValidator = addressValidatorMap[finalChain];
+  if (address && !addressValidator?.isValid(address)) {
+    res.status(400).json({ message: "Address format is invalid for the selected chain" });
     return;
   }
 
