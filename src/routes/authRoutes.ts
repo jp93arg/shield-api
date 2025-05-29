@@ -8,7 +8,7 @@ router.use("/auth", router);
 
 /**
  * @swagger
- * /signin:
+ * /api/auth/signin:
  *   post:
  *     summary: Sign in a user
  *     tags: [Auth]
@@ -47,7 +47,7 @@ router.post("/signin", validateRequest({body: signinSchema}), signin);
 
 /**
  * @swagger
- * /signout:
+ * /api/auth/signout:
  *   post:
  *     summary: Sign out a user
  *     tags: [Auth]
@@ -63,7 +63,7 @@ router.post("/signout", signout);
 
 /**
  * @swagger
- * /signup:
+ * /api/auth/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]

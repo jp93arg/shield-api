@@ -18,7 +18,7 @@ router.use(authenticateToken); // protects all routes below
 
 /**
  * @swagger
- * /wallets:
+ * /api/wallets:
  *   get:
  *     summary: Get paginated list of wallets
  *     tags: [Wallets]
@@ -91,7 +91,7 @@ router.get("/", validateRequest({query: getWalletsQuerySchema}), getAllWallets);
 
 /**
  * @swagger
- * /wallets:
+ * /api/wallets:
  *   post:
  *     summary: Create a wallet
  *     tags: [Wallets]
@@ -121,7 +121,7 @@ router.post("/", validateRequest({body: createWalletSchema}), createWallet);
 
 /**
  * @swagger
- * /wallets/{id}:
+ * /api/wallets/{id}:
  *   get:
  *     summary: Get a wallet by ID
  *     tags: [Wallets]
@@ -142,7 +142,7 @@ router.get("/:id", validateRequest({params: idParamSchema}), getWalletById);
 
 /**
  * @swagger
- * /wallets/{id}:
+ * /api/wallets/{id}:
  *   put:
  *     summary: Update a wallet by ID
  *     tags: [Wallets]
@@ -176,7 +176,7 @@ router.put("/:id", validateRequest({params: idParamSchema, body: updateWalletSch
 
 /**
  * @swagger
- * /wallets/{id}:
+ * /api/wallets/{id}:
  *   delete:
  *     summary: Delete a wallet by ID
  *     tags: [Wallets]
