@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
-    "start": "ts-node src/server.ts",
+    "start": "npm run migrate && ts-node src/server.ts",
+    "migrate": "sequelize db:migrate",
     "test:setup": "docker-compose up -d test-db",
     "test:run": "wait-on tcp:localhost:5433 && jest --runInBand",
     "test": "npm run test:setup && npm run test:run",
