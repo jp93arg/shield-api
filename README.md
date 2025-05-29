@@ -52,6 +52,11 @@ docker-compose up --build
 http://localhost:3000
 Swagger docs: http://localhost:3000/api-docs
 
+## Postman Collection
+
+A postman collection is available here:
+https://github.com/jp93arg/shield-backend-challenge/blob/main/Shield%20API.postman_collection.json
+
 ## CI
 
 ![Tests](https://github.com/jp93arg/shield-backend-challenge/actions/workflows/test.yml/badge.svg)
